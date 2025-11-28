@@ -145,9 +145,9 @@ git add .
 git commit -m "Initial commit - HICP ready deployment"
 ```
 
-2. Create GitHub repository and push:
+2. Push to existing GitHub repository:
 ```bash
-git remote add origin https://github.com/yourusername/share-webui.git
+git remote add origin https://github.com/vaibhav-r-pandey/regmap-genai.git
 git branch -M main
 git push -u origin main
 ```

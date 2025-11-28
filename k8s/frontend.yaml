@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: your-registry/share-webui-frontend:latest
+        image: ghcr.io/vaibhav-r-pandey/regmap-genai/share-webui-frontend:latest
         ports:
         - containerPort: 80
         resources:

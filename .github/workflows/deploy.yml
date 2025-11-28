@@ -56,14 +56,14 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ secrets.REGISTRY_URL }}/share-webui-frontend:${{ github.sha }}
+        tags: ghcr.io/vaibhav-r-pandey/regmap-genai/share-webui-frontend:${{ github.sha }}
     
     - name: Build and push backend image
       uses: docker/build-push-action@v4
       with:
         context: ./backend
         push: true
-        tags: ${{ secrets.REGISTRY_URL }}/share-webui-backend:${{ github.sha }}
+        tags: ghcr.io/vaibhav-r-pandey/regmap-genai/share-webui-backend:${{ github.sha }}
 
   deploy:
     needs: build-and-push
