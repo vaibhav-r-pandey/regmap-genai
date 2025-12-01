@@ -35,7 +35,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Set proper permissions
 RUN chown -R nginx:nginx /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 8080
 
 USER nginx
 
