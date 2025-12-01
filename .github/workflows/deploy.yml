@@ -55,8 +55,9 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
+        file: ./Dockerfile.simple
         push: true
-        tags: ghcr.io/vaibhav-r-pandey/regmap-genai/share-webui-frontend:${{ github.sha }}
+        tags: ghcr.io/vaibhav-r-pandey/regmap-genai/share-webui-frontend-simple:${{ github.sha }}
     
     - name: Build and push backend image
       uses: docker/build-push-action@v4

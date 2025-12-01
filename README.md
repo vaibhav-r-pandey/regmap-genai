@@ -39,10 +39,14 @@ npm install
 ### Running with Docker Compose
 
 ```bash
-docker-compose up --build
+# Simple deployment (recommended)
+docker compose -f docker-compose.simple.yml up --build
+
+# Or nginx deployment
+docker compose up --build
 ```
 
-Access the application at http://localhost
+Access the application at http://localhost:3000 (simple) or http://localhost (nginx)
 
 ### Running Locally
 
