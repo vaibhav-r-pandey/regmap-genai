@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: share-webui-config
+data:
+  REACT_APP_API_URL: "/api"
+  NODE_ENV: "production"
+  MONGO_URI: "mongodb://mongodb:27017/diffCheckerDB"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: share-webui-app
+  labels:
+    app: share-webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: share-webui
+  template:
+    metadata:
+      labels:
+        app: share-webui
+    spec:
+      initContainers:
+      - name: git-clone
+        image: alpine/git
+        command: ['sh', '-c', 'git clone https://github.com/vaibhav-r-pandey/regmap-genai.git /shared && cp -r /shared/share_webui /app']
+        volumeMounts:
+        - name: shared-data
+          mountPath: /shared
+        - name: app-data
+          mountPath: /app
+      containers:
+      - name: frontend
+        image: node:18-alpine
+        workingDir: /app/share_webui
+        command: ['sh', '-c', 'npm ci && npm run build && npm install -g serve && serve -s build -l 3000 &']
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: share-webui-config
+        volumeMounts:
+        - name: app-data
+          mountPath: /app
+      - name: backend
+        image: node:18-alpine
+        workingDir: /app/share_webui/backend
+        command: ['sh', '-c', 'npm ci && npm start']
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: share-webui-config
+        volumeMounts:
+        - name: app-data
+          mountPath: /app
+      - name: mongodb
+        image: mongo:6.0
+        ports:
+        - containerPort: 27017
+      volumes:
+      - name: shared-data
+        emptyDir: {}
+      - name: app-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: share-webui-service
+spec:
+  selector:
+    app: share-webui
+  ports:
+  - name: frontend
+    port: 80
+    targetPort: 3000
+  - name: backend
+    port: 5000
+    targetPort: 5000
+  - name: mongodb
+    port: 27017
+    targetPort: 27017
+  type: LoadBalancer
