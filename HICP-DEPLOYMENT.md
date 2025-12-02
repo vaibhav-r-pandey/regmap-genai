@@ -10,10 +10,17 @@
 - Click **"Create"** or **"+"** button
 - Select **"Create from YAML"**
 
-### 3. Copy and Paste YAML
-- Copy the entire content from `hicp-web-deploy.yaml`
-- Paste into the YAML editor
-- Click **"Create"** or **"Apply"**
+### 3. Deploy Files (in order)
+**Deploy these files one by one:**
+
+1. **ConfigMap**: Copy content from `hicp-configmap.yaml`
+2. **Deployment**: Copy content from `hicp-deployment.yaml`  
+3. **Service**: Copy content from `hicp-service.yaml`
+
+For each file:
+- Click "Create from YAML"
+- Paste content
+- Click "Create"
 
 ### 4. Monitor Deployment
 - Go to **Workloads** → **Pods**
