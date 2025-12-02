@@ -7,12 +7,18 @@
 git push origin main
 ```
 
-### 2. Deploy to HICP
-1. Login to HICP web interface
-2. Go to **Workloads** → **Deployments**
-3. Click **"Create from YAML"**
-4. Copy content from `hicp-docker-deploy.yaml`
-5. Paste and click **"Create"**
+### 2. Deploy to HICP (Deploy in Order)
+**Step 1: Deploy Application**
+1. Go to **Workloads** → **Deployments**
+2. Click **"Create from YAML"**
+3. Copy content from `hicp-deployment.yaml`
+4. Paste and click **"Create"**
+
+**Step 2: Create Service**
+1. Go to **Services**
+2. Click **"Create from YAML"**
+3. Copy content from `hicp-service.yaml`
+4. Paste and click **"Create"**
 
 ### 3. Access Application
 - Go to **Services** → **share-webui-service**
