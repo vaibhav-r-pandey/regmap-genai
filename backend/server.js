@@ -35,6 +35,28 @@ mongoose
 // Routes
 app.use("/api/files", require("./routes/fileRoutes"));
 
+// Proxy to Python backend for register processing
+app.use('/api/process-registers', (req, res) => {
+  const pythonBackendUrl = process.env.PYTHON_BACKEND_URL || 'http://localhost:5001';
+  
+  const options = {
+    method: req.method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...req.headers
+    },
+    body: req.method !== 'GET' ? JSON.stringify(req.body) : undefined
+  };
+  
+  fetch(`${pythonBackendUrl}/api/process-registers`, options)
+    .then(response => response.json())
+    .then(data => res.json(data))
+    .catch(error => {
+      console.error('Python backend error:', error);
+      res.status(500).json({ error: 'Python backend not available' });
+    });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

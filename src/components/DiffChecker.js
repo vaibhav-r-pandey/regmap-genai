@@ -49,16 +49,39 @@ function DiffChecker() {
   const saveComparison = async () => {
     setLoading(true);
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || "/api";
-      const response = await fetch(`${apiUrl}/files`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text1, text2, differences }),
-      });
-      const data = await response.json();
-      alert("Comparison saved successfully!");
+      // Try multiple backend URLs for HICP deployment
+      const apiUrls = [
+        process.env.REACT_APP_API_URL,
+        "/api",
+        "http://localhost:5000/api",
+        "http://backend:5000/api"
+      ].filter(Boolean);
+      
+      let success = false;
+      for (const apiUrl of apiUrls) {
+        try {
+          const response = await fetch(`${apiUrl}/files`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text1, text2, differences }),
+          });
+          if (response.ok) {
+            const data = await response.json();
+            alert("Comparison saved successfully!");
+            success = true;
+            break;
+          }
+        } catch (err) {
+          console.log(`Failed to connect to ${apiUrl}:`, err.message);
+        }
+      }
+      
+      if (!success) {
+        alert("Backend not running! Start with: python backend/test.py");
+      }
     } catch (error) {
       console.error("Error saving comparison:", error);
+      alert("Backend not running! Start with: python backend/test.py");
     }
     setLoading(false);
   };

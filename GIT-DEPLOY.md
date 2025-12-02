@@ -30,6 +30,12 @@ git push origin main
 - Run the application
 - Create routes automatically
 
+## For Backend (Python Flask):
+1. **Separate Deployment**: Deploy backend separately
+2. **Environment Variables**: Set GPT4IFX_USERNAME and GPT4IFX_PASSWORD
+3. **Python Runtime**: Ensure Python 3.10+ available
+4. **Dependencies**: Install Flask, openai, httpx, requests
+
 ## Build Time:
 - Initial deployment: 3-5 minutes
 - Subsequent updates: Push to GitHub triggers rebuild
