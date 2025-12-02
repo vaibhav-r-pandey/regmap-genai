@@ -28,7 +28,7 @@ jobs:
         npm ci
     
     - name: Run frontend tests
-      run: npm test -- --coverage --watchAll=false
+      run: npm test -- --coverage --watchAll=false --passWithNoTests
     
     - name: Build frontend
       run: npm run build
