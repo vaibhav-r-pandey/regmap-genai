@@ -1,11 +1,10 @@
-# Multi-stage build for React app
-FROM node:18-alpine AS build
+FROM node:18-alpine
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 
 # Copy source code
 COPY src/ ./src/
@@ -14,29 +13,14 @@ COPY public/ ./public/
 # Build the app
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# Install serve
+RUN npm install -g serve
 
-# Create nginx cache directories and set permissions
-RUN mkdir -p /var/cache/nginx/client_temp \
-    && mkdir -p /var/cache/nginx/proxy_temp \
-    && mkdir -p /var/cache/nginx/fastcgi_temp \
-    && mkdir -p /var/cache/nginx/uwsgi_temp \
-    && mkdir -p /var/cache/nginx/scgi_temp \
-    && chown -R nginx:nginx /var/cache/nginx \
-    && chmod -R 755 /var/cache/nginx
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
+RUN chown -R nodejs:nodejs /app
+USER nodejs
 
-# Copy built app to nginx
-COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 3000
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Set proper permissions
-RUN chown -R nginx:nginx /usr/share/nginx/html
-
-EXPOSE 8080
-
-USER nginx
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["serve", "-s", "build", "-l", "3000"]
