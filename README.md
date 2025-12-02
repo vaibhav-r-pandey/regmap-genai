@@ -92,6 +92,17 @@ kubectl apply -f k8s/
 
 ### HICP Deployment
 
+**Option 1: Git Clone Deployment (Recommended)**
+```bash
+# Deploy directly from git
+kubectl apply -f hicp-deploy.yaml
+
+# Or use script
+chmod +x hicp-deploy.sh
+./hicp-deploy.sh
+```
+
+**Option 2: Container Registry**
 1. Configure GitHub secrets:
    - `REGISTRY_URL`: Container registry URL
    - `REGISTRY_USERNAME`: Registry username
